@@ -6,15 +6,15 @@ import java.util.Objects;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int size = 0;
+    private int size;
+
     void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     void save(Resume r) {
-        int index = Math.max(size, 0);
-        storage[index] = r;
+        storage[size] = r;
         size++;
     }
 
@@ -28,9 +28,10 @@ public class ArrayStorage {
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
             if (Objects.equals(uuid, storage[i].toString())) {
-                storage[i] = storage[size-1];
-                storage[size-1] = null;
-                size --;
+                storage[i] = storage[size - 1];
+                storage[size - 1] = null;
+                size--;
+                break;
             }
         }
     }
