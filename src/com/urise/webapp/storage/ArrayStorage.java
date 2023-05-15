@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void removeUnwantedResume(int index) {
+    protected void removeResume(int index) {
         storage[index] = storage[size - 1];
     }
 

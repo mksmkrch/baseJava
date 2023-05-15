@@ -13,7 +13,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    protected void removeUnwantedResume(int index) {
+    protected void removeResume(int index) {
         int lengthCopy = size - 1 - index;
         if (lengthCopy > 0) {
             System.arraycopy(storage, index + 1, storage, index, lengthCopy);
