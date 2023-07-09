@@ -29,12 +29,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey, String uuid) {
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey >= 0;
+    }
+
+    @Override
+    protected Resume doGet(Object searchKey) {
         return storage[(Integer) searchKey];
     }
 
     @Override
-    protected void doDelete(Object searchKey, String uuid) {
+    protected void doDelete(Object searchKey) {
         removeResume((Integer) searchKey);
         storage[size - 1] = null;
         size--;
