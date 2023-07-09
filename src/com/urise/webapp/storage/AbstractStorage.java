@@ -7,6 +7,18 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
+    protected abstract Object getSearchKey(String uuid);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    protected abstract Resume doGet(Object searchKey);
+
+    protected abstract void doDelete(Object searchKey);
+
+    protected abstract void doSave(Resume r, Object searchKey);
+
+    protected abstract void doUpdate(Resume r, Object searchKey);
+
     @Override
     public void save(Resume r) {
         Object searchKey = getExistingSearchKey(r.getUuid());
@@ -30,18 +42,6 @@ public abstract class AbstractStorage implements Storage {
         Object searchKey = getNotExistingSearchKey(uuid);
         doDelete(searchKey);
     }
-
-    protected abstract Object getSearchKey(String uuid);
-
-    protected abstract boolean isExist(Object searchKey);
-
-    protected abstract Resume doGet(Object searchKey);
-
-    protected abstract void doDelete(Object searchKey);
-
-    protected abstract void doSave(Resume r, Object searchKey);
-
-    protected abstract void doUpdate(Resume r, Object searchKey);
 
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
