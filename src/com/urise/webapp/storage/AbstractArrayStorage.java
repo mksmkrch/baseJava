@@ -4,14 +4,24 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
-    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
+
+    public int size() {
+        return size;
+    }
+
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
@@ -29,11 +39,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
-    }
-
-    @Override
     protected Resume doGet(Object searchKey) {
         return storage[(Integer) searchKey];
     }
@@ -46,19 +51,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
+    public List<Resume> getAllSorted() {
+        Resume[] tempStorage = Arrays.copyOf(storage, size);
+        Arrays.sort(tempStorage, RESUME_COMPARATOR);
+        return Arrays.asList(tempStorage);
     }
 
     @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     protected abstract void removeResume(int index);

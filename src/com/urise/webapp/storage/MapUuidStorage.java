@@ -2,15 +2,10 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MapStorage extends AbstractStorage {
-
-    Map<String, Resume> mapStorage = new HashMap<>();
+public class MapUuidStorage extends AbstractMapStorage {
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
@@ -37,20 +32,5 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object searchKey) {
         return mapStorage.containsKey((String) searchKey);
-    }
-
-    @Override
-    public void clear() {
-        mapStorage.clear();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return mapStorage.values().toArray(new Resume[0]);
-    }
-
-    @Override
-    public int size() {
-        return mapStorage.size();
     }
 }

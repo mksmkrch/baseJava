@@ -10,7 +10,7 @@ public class ListStorage extends AbstractStorage {
     private final List<Resume> listStorage = new ArrayList<>();
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < size(); i++) {
             if (uuid.equals(listStorage.get(i).getUuid())) return i;
         }
@@ -48,8 +48,10 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return listStorage.toArray(new Resume[size()]);
+    public List<Resume> getAllSorted() {
+        List<Resume> tempList = new ArrayList<>(listStorage);
+        tempList.sort(RESUME_COMPARATOR);
+        return tempList;
     }
 
     @Override
