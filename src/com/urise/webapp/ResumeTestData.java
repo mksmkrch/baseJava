@@ -130,20 +130,17 @@ public class ResumeTestData {
     }
 
     private static CompanySection fillOrganizationSection(String text, SectionType type) throws Exception {
-        List<String> listStrings = new ArrayList<>(Arrays.asList(text.split("\n| - ")));
+        String[] lines = text.split("\n| - ");
         int counter = (type == SectionType.EXPERIENCE) ? 6 : 5;
-        String[] args = new String[counter];
         List<Company> companies = new ArrayList<>();
-        for (int i = 0; i < listStrings.size(); i++) {
-            args[i] = listStrings.get(0);
-            listStrings.remove(0);
-            if (i == counter - 1) {
-                Company buffCompany = new Company(args);
-                if (companies.contains(buffCompany)) {
-                    args = Arrays.copyOfRange(args, 2, args.length);
-                    companies.get(companies.indexOf(buffCompany)).addPeriods(args);
-                } else companies.add(buffCompany);
-                i = -1;
+        for (int i = 0; i < lines.length; i += counter) {
+            String[] args = Arrays.copyOfRange(lines, i, i + counter);
+            Company buffCompany = new Company(args);
+            if (companies.contains(buffCompany)) {
+                args = Arrays.copyOfRange(args, 2, args.length);
+                companies.get(companies.indexOf(buffCompany)).addPeriods(args);
+            } else {
+                companies.add(buffCompany);
             }
         }
         return new CompanySection(companies);
