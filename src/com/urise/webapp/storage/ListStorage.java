@@ -5,9 +5,19 @@ import com.urise.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     private final List<Resume> listStorage = new ArrayList<>();
+
+    @Override
+    public void clear() {
+        listStorage.clear();
+    }
+
+    @Override
+    public List<Resume> getAll() {
+        return new ArrayList<>(listStorage);
+    }
 
     @Override
     protected Integer getSearchKey(String uuid) {
@@ -18,40 +28,28 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return listStorage.get((Integer) searchKey);
+    protected Resume doGet(Integer searchKey) {
+        return listStorage.get(searchKey);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
+    protected void doDelete(Integer searchKey) {
         listStorage.remove((int) searchKey);
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Integer searchKey) {
         listStorage.add(r);
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        listStorage.set((Integer) searchKey, r);
+    protected void doUpdate(Resume r, Integer searchKey) {
+        listStorage.set(searchKey, r);
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(Integer searchKey) {
         return (int) searchKey >= 0;
-    }
-
-    @Override
-    public void clear() {
-        listStorage.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> tempList = new ArrayList<>(listStorage);
-        tempList.sort(RESUME_COMPARATOR);
-        return tempList;
     }
 
     @Override

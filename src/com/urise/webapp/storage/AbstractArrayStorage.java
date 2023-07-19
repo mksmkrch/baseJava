@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -24,42 +24,41 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected List<Resume> getAll() {
+        Resume[] tempStorage = Arrays.copyOf(storage, size);
+        return Arrays.asList(tempStorage);
+    }
+
+    @Override
+    protected void doSave(Resume r, Integer searchKey) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            insertResume(r, (Integer) searchKey);
+            insertResume(r, searchKey);
             size++;
         }
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        storage[(Integer) searchKey] = r;
+    protected void doUpdate(Resume r, Integer searchKey) {
+        storage[searchKey] = r;
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return storage[(Integer) searchKey];
+    protected Resume doGet(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        removeResume((Integer) searchKey);
+    protected void doDelete(Integer searchKey) {
+        removeResume(searchKey);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] tempStorage = Arrays.copyOf(storage, size);
-        Arrays.sort(tempStorage, RESUME_COMPARATOR);
-        return Arrays.asList(tempStorage);
-    }
-
-    @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     protected abstract void removeResume(int index);
