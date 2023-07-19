@@ -1,28 +1,54 @@
 @startuml
-class ListOrganizations {
-- List<Organization> places
-+ List<Organization> getJob()
-}
-class Organization {
-- Link name
-- Date dateStart
-- Date dateEnd
-- String position
-- String info
+class CompanySection {
+- List<Company> companies
++ List<Company> getCompanies()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
 }
 class TextSection {
 - String info
 + String getInfo()
++ String toString()
++ boolean equals(Object)
++ int hashCode()
+}
+class Period {
+- LocalDate dateStart
+- LocalDate dateEnd
+- String title
+- String description
++ LocalDate getDateStart()
++ LocalDate getDateEnd()
++ String getTitle()
++ String getDescription()
+- {static} LocalDate dateParse(String)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+class Company {
+- Link name
+- List<Period> periods
++ Link getName()
++ List<Period> getPeriods()
++ void addPeriods(String)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
 }
 class Resume {
 - String uuid
 - String fullName
-+ EnumMap<ContactType,String> contacts
++ EnumMap<ContactType,Link> contacts
 + EnumMap<SectionType,Section> sections
 + String getUuid()
 + String getFullName()
-+ String getContact(ContactType)
++ Link getContact(ContactType)
 + Section getSection(SectionType)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
 }
 class Section {
 }
@@ -35,12 +61,16 @@ enum SectionType {
 +  EDUCATION
 - String title
 + String getTitle()
++ String toString()
 }
 class Link {
 - String name
 - String url
 + String getName()
 + String getUrl()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
 }
 enum ContactType {
 +  PHONE
@@ -52,14 +82,16 @@ enum ContactType {
 +  HOMEPAGE
 - String title
 + String getTitle()
++ String toString()
 }
 class ListSection {
 - List<String> info
 + List<String> getInfo()
++ String toString()
 }
 
 
-Section <|-- ListOrganizations
+Section <|-- CompanySection
 Section <|-- TextSection
 Section <|-- ListSection
 @enduml

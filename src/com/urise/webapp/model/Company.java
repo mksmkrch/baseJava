@@ -36,7 +36,6 @@ public class Company {
         } else {
             periods.add(new Period(items[0], items[1], items[2]));
         }
-        //System.out.println(newPeriod);
     }
 
     @Override
