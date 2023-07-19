@@ -46,7 +46,6 @@ public class Period {
             ym = LocalDate.parse(date + "/1", DateTimeFormatter.ofPattern("MM/yyyy/d"));
         } catch (Exception ignored) {
         }
-        ;
         return ym;
     }
 
@@ -65,8 +64,8 @@ public class Period {
 
     @Override
     public String toString() {
-        return dateStart + " - " +
-                dateEnd +
+        return dateStart.format(DateTimeFormatter.ofPattern("MM/yyyy")) + " - " +
+                (Objects.isNull(dateEnd) ? "Сейчас" : dateEnd.format(DateTimeFormatter.ofPattern("MM/yyyy"))) +
                 "\n" + title +
                 (Objects.isNull(description) ? "" : "\n" + description);
     }
