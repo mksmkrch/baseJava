@@ -2,6 +2,8 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ResumeTestData {
@@ -107,21 +109,7 @@ public class ResumeTestData {
 
 
     public static void main(String[] args) throws Exception {
-        Resume resume = new Resume("testResume");
-        resume.contacts.put(ContactType.PHONE, phoneLink);
-        resume.contacts.put(ContactType.SKYPE, skypeLink);
-        resume.contacts.put(ContactType.MAIL, mailLink);
-        resume.contacts.put(ContactType.LINKEDIN, linkedInLink);
-        resume.contacts.put(ContactType.GITHUB, gitHubLink);
-        resume.contacts.put(ContactType.STACKOVERFLOW, stackOverFlowLink);
-        resume.contacts.put(ContactType.HOMEPAGE, homePageLink);
-
-        resume.sections.put(SectionType.OBJECTIVE, new TextSection(objectiveContent));
-        resume.sections.put(SectionType.PERSONAL, new TextSection(personalContent));
-        resume.sections.put(SectionType.ACHIEVEMENT, fillListSection(achievementContent));
-        resume.sections.put(SectionType.QUALIFICATIONS, fillListSection(qualificationsContent));
-        resume.sections.put(SectionType.EXPERIENCE, fillOrganizationSection(experienceContent, SectionType.EXPERIENCE));
-        resume.sections.put(SectionType.EDUCATION, fillOrganizationSection(educationContent, SectionType.EDUCATION));
+        Resume resume = createResume("1", "testResume");
         System.out.println(resume);
     }
 
@@ -135,14 +123,49 @@ public class ResumeTestData {
         List<Company> companies = new ArrayList<>();
         for (int i = 0; i < lines.length; i += counter) {
             String[] args = Arrays.copyOfRange(lines, i, i + counter);
-            Company buffCompany = new Company(args);
+            Company buffCompany = new Company(args[0], args[1]);
+            LocalDate dateStart = dateParse(args[2]);
+            LocalDate dateEnd = dateParse(args[3]);
+            args = Arrays.copyOfRange(args, 4, args.length);
             if (companies.contains(buffCompany)) {
-                args = Arrays.copyOfRange(args, 2, args.length);
-                companies.get(companies.indexOf(buffCompany)).addPeriods(args);
+                companies.get(companies.indexOf(buffCompany)).addPeriod(dateStart, dateEnd, args);
             } else {
+                buffCompany.addPeriod(dateStart, dateEnd, args);
                 companies.add(buffCompany);
             }
         }
         return new CompanySection(companies);
+    }
+
+    private static LocalDate dateParse(String date) {
+        if (date.contains("/")) return LocalDate.parse(date + "/1", DateTimeFormatter.ofPattern("MM/yyyy/d"));
+        return null;
+    }
+
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.contacts.put(ContactType.PHONE, phoneLink);
+        resume.contacts.put(ContactType.SKYPE, skypeLink);
+        resume.contacts.put(ContactType.MAIL, mailLink);
+        resume.contacts.put(ContactType.LINKEDIN, linkedInLink);
+        resume.contacts.put(ContactType.GITHUB, gitHubLink);
+        resume.contacts.put(ContactType.STACKOVERFLOW, stackOverFlowLink);
+        resume.contacts.put(ContactType.HOMEPAGE, homePageLink);
+
+        resume.sections.put(SectionType.OBJECTIVE, new TextSection(objectiveContent));
+        resume.sections.put(SectionType.PERSONAL, new TextSection(personalContent));
+        resume.sections.put(SectionType.ACHIEVEMENT, fillListSection(achievementContent));
+        resume.sections.put(SectionType.QUALIFICATIONS, fillListSection(qualificationsContent));
+        try {
+            resume.sections.put(SectionType.EXPERIENCE, fillOrganizationSection(experienceContent, SectionType.EXPERIENCE));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            resume.sections.put(SectionType.EDUCATION, fillOrganizationSection(educationContent, SectionType.EDUCATION));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return resume;
     }
 }

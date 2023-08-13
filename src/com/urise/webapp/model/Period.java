@@ -26,27 +26,11 @@ public class Period {
         return description;
     }
 
-    public Period(String dateStart, String dateEnd, String title) throws Exception {
-        this.dateStart = dateParse(dateStart);
-        this.dateEnd = dateParse(dateEnd);
-        this.title = title;
-        this.description = null;
-    }
-
-    public Period(String dateStart, String dateEnd, String title, String description) throws Exception {
-        this.dateStart = dateParse(dateStart);
-        this.dateEnd = dateParse(dateEnd);
-        this.title = title;
-        this.description = description;
-    }
-
-    private static LocalDate dateParse(String date) throws Exception {
-        LocalDate ym = null;
-        try {
-            ym = LocalDate.parse(date + "/1", DateTimeFormatter.ofPattern("MM/yyyy/d"));
-        } catch (Exception ignored) {
-        }
-        return ym;
+    public Period(LocalDate dateStart, LocalDate dateEnd, String... args) {
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.title = args[0];
+        this.description = args.length == 2 ? args[1] : null;
     }
 
     @Override

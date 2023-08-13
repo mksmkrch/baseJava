@@ -2,6 +2,9 @@
 out
 *.iml
 log
+.puml
+.plantuml
 
 
 
+fichi.*

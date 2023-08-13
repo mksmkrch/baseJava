@@ -4,20 +4,20 @@ import java.util.Objects;
 
 public class TextSection extends Section {
 
-    private final String info;
+    private final String text;
 
     public TextSection(String info) {
         Objects.requireNonNull(info, "Information must not be null");
-        this.info = info;
+        this.text = info;
     }
 
     public String getInfo() {
-        return info;
+        return text;
     }
 
     @Override
     public String toString() {
-        return info + "\n";
+        return text + "\n";
     }
 
     @Override
@@ -25,11 +25,11 @@ public class TextSection extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return info.equals(that.info);
+        return text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(info);
+        return Objects.hash(text);
     }
 }

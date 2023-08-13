@@ -1,6 +1,7 @@
 package com.urise.webapp.model;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,9 +14,9 @@ public class Resume {
     private final String uuid;
     private final String fullName;
 
-    public final EnumMap<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
+    public final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
 
-    public final EnumMap<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+    public final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
